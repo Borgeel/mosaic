@@ -1,9 +1,8 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { decrement, increment } from "../theAwful/theAwfulSlice";
 
 const Counter = () => {
-  const count = useSelector((state) => state.counter.value);
   const defter = useDispatch();
 
   return (

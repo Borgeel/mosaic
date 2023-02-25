@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { createStranka } from "./theAwfulSlice";
+import createStranka from "./theAwfulSlice";
 
-export const predaja = configureStore({
+export default configureStore({
   reducer: {
     stranka: createStranka,
   },
