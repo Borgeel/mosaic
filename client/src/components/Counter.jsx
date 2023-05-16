@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { decrement, increment } from "../theAwful/theAwfulSlice";
+import { decrement, increment } from "../theAwful/bake";
 
 const Counter = () => {
   const defter = useDispatch();
