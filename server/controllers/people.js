@@ -28,6 +28,7 @@ export const createPerson = async (req, res) => {
   const newPerson = await new Person({
     name: name,
     age: age,
+    likes: [],
   });
 
   try {
@@ -54,15 +55,32 @@ export const deletePerson = async (req, res) => {
 export const editPerson = async (req, res) => {
   const { id } = req.params;
 
-  const { name, age } = req.body.editedPerson;
+  const { name, age, likes } = req.body.editedPerson;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No Person with id: ${id}`);
   }
 
-  const editedPerson = { _id: id, name, age };
+  const editedPerson = { _id: id, name, age, likes };
 
   await Person.findByIdAndUpdate(id, editedPerson, { new: true });
 
   res.status(200).json(editedPerson);
+};
+
+export const likePerson = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send(`No person with the ID: ${id}`);
+  }
+
+  const person = await Person.findById(id);
+
+  let count = person.likes.length;
+  person.likes.push(count++);
+
+  const likedPerson = await Person.findByIdAndUpdate(id, person, { new: true });
+
+  res.json(likedPerson);
 };

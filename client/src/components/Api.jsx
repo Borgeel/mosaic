@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Person from "./Person";
 import Button from "./Button";
+import { useFetch } from "../useFetch";
 
 const Api = () => {
   const [people, setPeople] = useState();
@@ -10,8 +11,11 @@ const Api = () => {
   const [newPerson, setNewPerson] = useState(null);
   const [newPersonInfo, setNewPersonInfo] = useState({ name: "", age: "" });
   const [editedPerson, setEditedPerson] = useState();
-
   const URL = "http://localhost:8000/people";
+
+  // const { data, error, loading } = useFetch(URL);
+
+  // if (error) console.log(error);
 
   useEffect(() => {
     const fetchPeople = async () => {
@@ -56,6 +60,7 @@ const Api = () => {
           const res = await fetch(URL, settings);
           const data = await res.json();
 
+          // console.log("From addperson", { data });
           if (isCancelled) {
             setPeople((prevPeople) => [...prevPeople, data]);
             setNewPerson(null);
@@ -98,13 +103,44 @@ const Api = () => {
     }
   }, [editedPerson]);
 
-  const deleteHandler = async (id) => {
-    const res = await fetch(`${URL}/${id}`, { method: "DELETE" });
-    const data = await res.json();
-    console.log(data);
+  const likeHandler = async (likedPerson) => {
+    if (likedPerson) {
+      const settings = {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ likedPerson }),
+      };
 
-    const filteredPeople = people.filter((person) => person._id !== id);
-    setPeople(filteredPeople);
+      try {
+        const res = await fetch(`${URL}/${likedPerson._id}`, settings);
+        const data = await res.json();
+
+        setPeople((prevPeople) =>
+          prevPeople.map((person) => (person._id === data._id ? data : person))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    likeHandler();
+    deleteHandler();
+  }, []);
+
+  const deleteHandler = async (id) => {
+    if (!id) return;
+    try {
+      const res = await fetch(`${URL}/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      console.log(data);
+
+      const filteredPeople = people.filter((person) => person._id !== id);
+      setPeople(filteredPeople);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const chngHandler = (e) => {
@@ -132,6 +168,7 @@ const Api = () => {
               person={person}
               deleteHandler={deleteHandler}
               setEditedPerson={setEditedPerson}
+              likeHandler={likeHandler}
             />
           ))}
         </ul>

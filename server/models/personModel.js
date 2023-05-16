@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
 const personModel = mongoose.Schema({
-  name: { type: String },
-  age: { type: String },
+  name: String,
+  age: String,
+  likes: { type: [String], default: [] },
 });
 
 export default mongoose.model("Person", personModel);
