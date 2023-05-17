@@ -32,6 +32,12 @@ const Api = () => {
     setNewPersonInfo({ name: "", age: "" });
   };
 
+  if (loading) {
+    return <h1> Loading... </h1>;
+  }
+
+  if (error) console.log(error);
+
   return (
     <>
       <h1>Api Practice</h1>

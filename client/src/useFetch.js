@@ -63,7 +63,7 @@ export const useFetch = (url) => {
         prevState.map((person) => (person._id === data._id ? data : person))
       );
     } catch (error) {
-      console.log(error);
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -78,30 +78,30 @@ export const useFetch = (url) => {
 
       setData((prevPeople) => prevPeople.filter((person) => person._id !== id));
     } catch (error) {
-      console.log(error);
+      setError(error);
     } finally {
       setLoading(false);
     }
   };
 
   const likeHandler = async (likedPerson) => {
-    if (likedPerson) {
-      const settings = {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likedPerson }),
-      };
+    const settings = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ likedPerson }),
+    };
+    setLoading(true);
+    try {
+      const res = await fetch(`${url}/${likedPerson._id}`, settings);
+      const data = await res.json();
 
-      try {
-        const res = await fetch(`${url}/${likedPerson._id}`, settings);
-        const data = await res.json();
-
-        setData((prevPeople) =>
-          prevPeople.map((person) => (person._id === data._id ? data : person))
-        );
-      } catch (error) {
-        console.log(error);
-      }
+      setData((prevPeople) =>
+        prevPeople.map((person) => (person._id === data._id ? data : person))
+      );
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
