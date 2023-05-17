@@ -61,7 +61,7 @@ export const editPerson = async (req, res) => {
     return res.status(404).send(`No Person with id: ${id}`);
   }
 
-  const editedPerson = { _id: id, name, age, likes };
+  const editedPerson = { _id: id, name: name, age: age, likes: likes };
 
   await Person.findByIdAndUpdate(id, editedPerson, { new: true });
 
@@ -77,8 +77,10 @@ export const likePerson = async (req, res) => {
 
   const person = await Person.findById(id);
 
-  let count = person.likes.length;
-  person.likes.push(count++);
+  if (person) {
+    let count = person?.likes?.length;
+    person?.likes?.push(count++);
+  }
 
   const likedPerson = await Person.findByIdAndUpdate(id, person, { new: true });
 

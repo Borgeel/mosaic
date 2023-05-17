@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Button from "./Button";
+// import { useFetch } from "../useFetch";
 
-const EditPerson = ({ person, setIsEdit, setEditedPerson }) => {
+const EditPerson = ({ person, setIsEdit, editPerson }) => {
   const [edited, setEdited] = useState({ name: "", age: "" });
 
   const editHandler = (e) => {
@@ -15,7 +16,7 @@ const EditPerson = ({ person, setIsEdit, setEditedPerson }) => {
     e.preventDefault();
 
     const newPerson = { ...edited, id: person._id };
-    setEditedPerson(newPerson);
+    editPerson(newPerson);
     setEdited({ name: "", age: "" });
     setIsEdit((prevState) => !prevState);
   };
