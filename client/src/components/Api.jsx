@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Person from "./Person";
 import Button from "./Button";
 import { useFetch } from "../useFetch";
@@ -11,7 +11,6 @@ const Api = () => {
     data: people,
     error,
     loading,
-    setData,
     addPerson,
     editPerson,
     deleteHandler,

@@ -25,36 +25,42 @@ export const useFetch = (url) => {
     fetchData();
   }, [url]);
 
-  const addPerson = async (newPerson) => {
-    if (newPerson) {
-      setLoading(true);
-      try {
-        const settings = {
-          method: "POST",
-          headers: { "Content-Type": "Application/json" },
-          body: JSON.stringify(newPerson),
-        };
-        const res = await fetch(url, settings);
-        const data = await res.json();
+  useEffect(() => {
+    addPerson();
+    editPerson();
+    likeHandler();
+    deleteHandler();
+  }, []);
 
-        setData((prevPeople) => [...prevPeople, data]);
-      } catch (error) {
-        console.log(error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
+  const addPerson = async (newPerson) => {
+    if (!newPerson) return;
+    setLoading(true);
+    try {
+      const settings = {
+        method: "POST",
+        headers: { "Content-Type": "Application/json" },
+        body: JSON.stringify(newPerson),
+      };
+      const res = await fetch(url, settings);
+      const data = await res.json();
+
+      setData((prevPeople) => [...prevPeople, data]);
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const editPerson = async (editedPerson) => {
-    setLoading(true);
-
+    if (!editedPerson) return;
     const settings = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ editedPerson }),
     };
+    setLoading(true);
     try {
       const res = await fetch(`${url}/${editedPerson.id}`, settings);
       const data = await res.json();
@@ -70,6 +76,7 @@ export const useFetch = (url) => {
   };
 
   const deleteHandler = async (id) => {
+    if (!id) return;
     setLoading(true);
     try {
       const res = await fetch(`${url}/${id}`, { method: "DELETE" });
@@ -85,6 +92,7 @@ export const useFetch = (url) => {
   };
 
   const likeHandler = async (likedPerson) => {
+    if (!likedPerson) return;
     const settings = {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
