@@ -8,7 +8,7 @@ const Person = ({ person, deleteHandler, likeHandler, editPerson }) => {
     <>
       {!isEdit ? (
         <li>
-          <h5> {person.name} </h5>
+          <h5 className="text-4xl"> {person.name} </h5>
           <h5> {person.age} </h5>
           {person?.likes?.length > 0 ? <p> {person?.likes?.length} </p> : null}
           <button onClick={() => deleteHandler(person._id)}>Delete</button>
